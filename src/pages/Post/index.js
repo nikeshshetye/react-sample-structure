@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, TextField, Spinner, Avatar, } from '@material-ui/core';
+import { Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile, GridListTileBar, ListSubheader } from '@material-ui/core';
 
 import { postToServer } from '../../actions/actionCreators';
 
@@ -10,8 +10,27 @@ class Post extends React.Component {
         super();
         this.state = {
             addPostModal: false,
-            img: ''
+            img: '',
+            list: [],
+            switchList: false,
         }
+    }
+
+    componentDidMount() {
+        const list = [];
+        for (let i = 0; i <= 5; i++) {
+            list.push({
+                id: 1,
+                createdAt: '2020-03-24T04:03:13.853Z',
+                name: 'name 1',
+                avatar: 'https://thumbs.dreamstime.com/z/love-palm-13888257.jpg',
+                desc: 'desc 1',
+                feed_img: {}
+            });
+        }
+        this.setState({
+            list
+        });
     }
 
     onProfileImageChange = (event) => {
@@ -39,7 +58,69 @@ class Post extends React.Component {
                     Post
                 </Button>
                 <br />
-                <Button variant="outlined" color="secondary">Extra color</Button>
+                <Button variant="outlined" color="secondary"
+                    onClick={() => {
+                        this.setState({
+                            switchList: !this.state.switchList
+                        });
+                    }}>
+                    Change display type
+                </Button>
+
+                {
+                    this.state.switchList ?
+                        <List>
+                            {
+                                this.state.list.map((item, index) => {
+                                    return (
+                                        <ListItem
+                                            button
+                                            key={item.id}
+                                            onPress={() => { console.log('list item click') }}
+                                            style={{
+                                                flexDirection: 'column',
+                                                boxShadow: '1px 0.5px 1px 1px #9E9E9E',
+                                                width: '20%',
+                                                margin: 15
+                                            }}>
+                                            <ListItemAvatar>
+                                                <Avatar alt="Avatar" src={item.avatar} />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={item.name} />
+                                            <ListItemText primary={item.desc} />
+                                        </ListItem>
+                                    );
+                                })
+                            }
+                        </List>
+                        :
+                        <GridList cellHeight={200}>
+                            <GridListTile cols={2} style={{ height: 'auto' }}>
+                                <ListSubheader component="div">Posts</ListSubheader>
+                            </GridListTile>
+                            {
+                                this.state.list.map((item) => (
+                                    <GridListTile
+                                        style={{
+                                            boxShadow: '1px 0.5px 1px 1px #9E9E9E',
+                                            width: '20%',
+                                            margin: 15
+                                        }}
+                                    >
+                                        <ListItemAvatar>
+                                            {/* <Avatar alt="Avatar" src={item.avatar} /> */}
+                                            <img src={item.avatar} />
+                                        </ListItemAvatar>
+                                        <GridListTileBar
+                                            title={item.desc}
+                                            subtitle={<span>by: {item.name}</span>}
+                                        />
+                                    </GridListTile>
+                                ))
+                            }
+                        </GridList>
+                }
+
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
@@ -92,17 +173,17 @@ class Post extends React.Component {
                         >
                             Post
                 </Button>
-                    <Button
-                        variant="outlined"
-                        color="secondary"
-                        style={{ marginLeft: 15 }}
-                        onClick={() => {
-                            this.setState({
-                                addPostModal: false,
-                            })
-                        }}
-                    >
-                        close
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            style={{ marginLeft: 15 }}
+                            onClick={() => {
+                                this.setState({
+                                    addPostModal: false,
+                                })
+                            }}
+                        >
+                            close
                 </Button>
                     </div>
                 </Modal>
