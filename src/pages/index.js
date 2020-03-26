@@ -4,8 +4,10 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 // import FullscreenLoader from 'fullscreenLoader';
+import Post from './Post';
 import Home from './Home';
 import Post from './Post';
+import About from './About';
 import { requestAppData } from '../actions/actionCreators';
 
 class App extends Component {
@@ -26,6 +28,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/Post" component={Post} />
+                    <Route path="/about" component={About} />
                 </Switch>
                 {/* 
                     // Toast Documentation

@@ -1,8 +1,12 @@
 import React from 'react';
+// import { Link } from 'react-dom';
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { InboxIcon, ChevronLeftIcon, ChevronRightIcon, MenuIcon } from '@material-ui/icons';
 import clsx from 'clsx';
+
+const navDrawerList = [{ id: 1, name: 'Home', link: '/' }, { id: 2, name: 'About', link: '/about' },
+{ id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/post' }];
 
 class Home extends React.Component {
    constructor() {
@@ -100,11 +104,11 @@ class Home extends React.Component {
                </div>
                <List>
                   {
-                     ['Home', 'About', 'Shoping', 'Posts'].map((item, index) => {
+                     navDrawerList.map((item, index) => {
                         return (
-                           <ListItem button key={item}>
+                           <ListItem button key={item.id}>
                               {/* <ListItemIcon><InboxIcon /></ListItemIcon> */}
-                              <ListItemText primary={item} />
+                              <ListItemText primary={item.name} />
                            </ListItem>
                         );
                      })
