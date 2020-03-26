@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 // import FullscreenLoader from 'fullscreenLoader';
+import Post from './Post';
 import Home from './Home';
 import About from './About';
 import { requestAppData } from '../actions/actionCreators';
@@ -20,7 +21,7 @@ class App extends Component {
         return (
             <Fragment>
                 <Switch>
-                    <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Post} />
                     <Route path="/about" component={About} />
                 </Switch>
                 {/* 
