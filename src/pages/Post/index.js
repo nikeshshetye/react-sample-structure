@@ -15,6 +15,7 @@ class Post extends React.Component {
             list: [],
             switchList: false,
             allData: [],
+            postDesc: ''
         }
     }
 
@@ -39,6 +40,13 @@ class Post extends React.Component {
         console.log('onProfileImageChange', event.target.files[0]);
         this.setState({
             img: URL.createObjectURL(event.target.files[0])
+        });
+    }
+
+    onDescriptionChange = (event) => {
+        console.log('onDescriptionChange', event.target.value);
+        this.setState({
+            postDesc: event.target.value
         });
     }
 
@@ -184,7 +192,13 @@ class Post extends React.Component {
                                     null
                             }
                             <br /><br />
-                            <TextField id="outlined-basic" label="Add Description to your post" variant="outlined" />
+                            <TextField 
+                            id="outlined-basic" 
+                            label="Add Description to your post" 
+                            variant="outlined"
+                            value={this.state.postDesc}
+                            onChange={this.onDescriptionChange}
+                            />
                         </form>
                         <br /><br />
                         <Button
@@ -194,10 +208,12 @@ class Post extends React.Component {
                                 this.props.postToServer({
                                     "name": "Sujay",
                                     "avatar": "https://cdn.dribbble.com/users/458522/screenshots/4697060/ironman.jpg",
-                                    "desc": "Product Description",
-                                    "feed_img": {
-                                        "name": "https://vignette.wikia.nocookie.net/ironman/images/8/89/Iron_man_mark_85.png/revision/latest?cb=20191020193716"
-                                    }
+                                    "desc": this.state.postDesc,
+                                    "feed_img": this.state.img
+                                });
+                                this.setState({
+                                    postDesc: '',
+                                    img: ''
                                 })
                             }}
                         >
