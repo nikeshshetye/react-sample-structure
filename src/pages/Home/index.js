@@ -1,5 +1,6 @@
 import React from 'react';
-// import { Link } from 'react-dom';
+
+import { Redirect } from "react-router-dom";
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
 // import { makeStyles, useTheme } from '@material-ui/core/styles';
 // import { InboxIcon, ChevronLeftIcon, ChevronRightIcon, MenuIcon } from '@material-ui/icons';
@@ -7,6 +8,8 @@ import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, Ic
 
 const navDrawerList = [{ id: 1, name: 'Home', link: '/' }, { id: 2, name: 'About', link: '/about' },
 { id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/post' }];
+
+let currentRedirect = '/';
 
 class Home extends React.Component {
    constructor() {
@@ -18,6 +21,7 @@ class Home extends React.Component {
          gender: '',
          img: '',
          isDrawerOpen: false,
+         redirectTo: currentRedirect,
       }
 
       const data = localStorage.getItem('loggedIn');
@@ -68,9 +72,12 @@ class Home extends React.Component {
    }
 
    render() {
+      if (this.state.redirectTo !== currentRedirect) {
+         return <Redirect to={this.state.redirectTo} />
+      }
       return (
          <div className="main" style={styles.containerStyle}>
-            {/* <AppBar
+            <AppBar
                position="fixed"
             >
                <Toolbar>
@@ -86,7 +93,7 @@ class Home extends React.Component {
                      Register
                   </Typography>
                </Toolbar>
-            </AppBar> */}
+            </AppBar>
 
             <Drawer
                variant="persistent"
@@ -103,7 +110,13 @@ class Home extends React.Component {
                   {
                      navDrawerList.map((item, index) => {
                         return (
-                           <ListItem button key={item.id}>
+                           <ListItem button key={item.id} onClick={() => {
+                              console.log('history', item.link, this.props.history);
+                              // this.props.history.push(item.link);
+                              this.setState({
+                                 redirectTo: item.link,
+                              });
+                           }}>
                               {/* <ListItemIcon><InboxIcon /></ListItemIcon> */}
                               <ListItemText primary={item.name} />
                            </ListItem>
