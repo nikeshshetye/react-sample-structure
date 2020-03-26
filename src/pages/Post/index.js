@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, TextField, Spinner, Avatar, } from '@material-ui/core';
 
-import { postToServer } from '../../actions/actionCreators';
+import { postToServer, getFromServer } from '../../actions/actionCreators';
+import { POST_DATA, GET_DATA } from '../../actions/actionsTypes';
 
 class Post extends React.Component {
 
@@ -10,7 +11,8 @@ class Post extends React.Component {
         super();
         this.state = {
             addPostModal: false,
-            img: ''
+            img: '',
+            allData: [],
         }
     }
 
@@ -21,8 +23,25 @@ class Post extends React.Component {
         });
     }
 
-    render() {
+    static getDerivedStateFromProps(props, prevState) {
+        console.log('getDerivedStateFromProps', props, prevState);
+        console.log('getDerivedStateFromProps alldata', props.post);
+        if (props.post.success) {
+            console.log('success alldata', props.post);
+            if (props.post.type === POST_DATA) {
 
+            } else if (props.post.type === GET_DATA) {
+                console.log('GET_DATA alldata', props.post);
+                return {
+                    allData: props.post.data,
+                }
+            }
+        }
+        return null;
+    }
+
+    render() {
+        console.log('state in render', this.state.allData);
         return (
             <div className='main'>
                 {/* <Button variant="contained">Post</Button>
@@ -39,7 +58,17 @@ class Post extends React.Component {
                     Post
                 </Button>
                 <br />
-                <Button variant="outlined" color="secondary">Extra color</Button>
+                <br />
+                <br />
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => {
+                        this.props.getFromServer();
+                    }}
+                >
+                    Display Posts
+                </Button>
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
@@ -92,17 +121,17 @@ class Post extends React.Component {
                         >
                             Post
                 </Button>
-                    <Button
-                        variant="outlined"
-                        color="secondary"
-                        style={{ marginLeft: 15 }}
-                        onClick={() => {
-                            this.setState({
-                                addPostModal: false,
-                            })
-                        }}
-                    >
-                        close
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            style={{ marginLeft: 15 }}
+                            onClick={() => {
+                                this.setState({
+                                    addPostModal: false,
+                                })
+                            }}
+                        >
+                            close
                 </Button>
                     </div>
                 </Modal>
@@ -115,11 +144,11 @@ class Post extends React.Component {
 
 const mapStateToProps = (state) => {
     console.log('state in mapsstate to props', state);
-    // const { cartItems } = state;
+    const { postReducer } = state;
     // return{
     //     cartItems,
     // }
-    return { post: state };
+    return { post: postReducer };
 }
 
 // const mapDispatchToProps = (dispatch) => {
@@ -128,4 +157,4 @@ const mapStateToProps = (state) => {
 //     }
 // }
 
-export default connect(mapStateToProps, { postToServer })(Post);
+export default connect(mapStateToProps, { postToServer, getFromServer })(Post);

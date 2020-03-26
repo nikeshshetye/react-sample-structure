@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 // import FullscreenLoader from 'fullscreenLoader';
 import Post from './Post';
 import Home from './Home';
-import Post from './Post';
 import About from './About';
 import { requestAppData } from '../actions/actionCreators';
 
