@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-dom';
 import { Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile, GridListTileBar, ListSubheader } from '@material-ui/core';
 
 import { postToServer, getFromServer } from '../../actions/actionCreators';
 import { POST_DATA, GET_DATA } from '../../actions/actionsTypes';
+import Home from '../Home';
 
 class Post extends React.Component {
 
@@ -15,7 +17,9 @@ class Post extends React.Component {
             list: [],
             switchList: false,
             allData: [],
-            postDesc: ''
+            postDesc: '',
+            addedList: [],
+            toHome: false,
         }
     }
 
@@ -69,6 +73,9 @@ class Post extends React.Component {
 
     render() {
         console.log('state in render', this.state.allData);
+        if (this.state.toHome === true) {
+            return <Redirect to='/Home' />
+         }
         return (
             <div className='main'>
                 {/* <Button variant="contained">Post</Button>
@@ -83,6 +90,19 @@ class Post extends React.Component {
                     }}
                 >
                     Post
+                </Button>
+                <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginLeft: 10 }}
+                            onClick={() => {
+                                localStorage.setItem('loggedIn', false);
+                                this.setState({
+                                    toHome: true
+                                 })
+                            }}
+                        >
+                            Log Out
                 </Button>
                 <br />
                 <br />
@@ -110,7 +130,7 @@ class Post extends React.Component {
                     this.state.switchList ?
                         <List>
                             {
-                                this.state.list.map((item, index) => {
+                                this.state.allData.map((item, index) => {
                                     return (
                                         <ListItem
                                             button
@@ -138,7 +158,7 @@ class Post extends React.Component {
                                 <ListSubheader component="div">Posts</ListSubheader>
                             </GridListTile>
                             {
-                                this.state.list.map((item) => (
+                                this.state.addedList.map((item) => (
                                     <GridListTile
                                         style={{
                                             boxShadow: '1px 0.5px 1px 1px #9E9E9E',
@@ -148,7 +168,7 @@ class Post extends React.Component {
                                     >
                                         <ListItemAvatar>
                                             {/* <Avatar alt="Avatar" src={item.avatar} /> */}
-                                            <img src={item.avatar} />
+                                            <img src={item.feed_img} />
                                         </ListItemAvatar>
                                         <GridListTileBar
                                             title={item.desc}
@@ -192,12 +212,12 @@ class Post extends React.Component {
                                     null
                             }
                             <br /><br />
-                            <TextField 
-                            id="outlined-basic" 
-                            label="Add Description to your post" 
-                            variant="outlined"
-                            value={this.state.postDesc}
-                            onChange={this.onDescriptionChange}
+                            <TextField
+                                id="outlined-basic"
+                                label="Add Description to your post"
+                                variant="outlined"
+                                value={this.state.postDesc}
+                                onChange={this.onDescriptionChange}
                             />
                         </form>
                         <br /><br />
@@ -206,14 +226,22 @@ class Post extends React.Component {
                             color="secondary"
                             onClick={() => {
                                 this.props.postToServer({
-                                    "name": "Sujay",
+                                    "name": localStorage.getItem('fname') || '',
                                     "avatar": "https://cdn.dribbble.com/users/458522/screenshots/4697060/ironman.jpg",
                                     "desc": this.state.postDesc,
                                     "feed_img": this.state.img
                                 });
+                                const addedList = this.state.addedList;
+                                addedList.push({
+                                    name: localStorage.getItem('fname') || '',
+                                    avatar: "https://cdn.dribbble.com/users/458522/screenshots/4697060/ironman.jpg",
+                                    desc: this.state.postDesc,
+                                    feed_img: this.state.img
+                                });
                                 this.setState({
                                     postDesc: '',
-                                    img: ''
+                                    img: '',
+                                    addedList
                                 })
                             }}
                         >

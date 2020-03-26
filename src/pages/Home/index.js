@@ -1,9 +1,10 @@
 import React from 'react';
-// import { Link } from 'react-dom';
+import { Link, Redirect } from 'react-dom';
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
 // import { makeStyles, useTheme } from '@material-ui/core/styles';
 // import { InboxIcon, ChevronLeftIcon, ChevronRightIcon, MenuIcon } from '@material-ui/icons';
 // import clsx from 'clsx';
+import Post from '../Post';
 
 const navDrawerList = [{ id: 1, name: 'Home', link: '/' }, { id: 2, name: 'About', link: '/about' },
 { id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/post' }];
@@ -18,11 +19,21 @@ class Home extends React.Component {
          gender: '',
          img: '',
          isDrawerOpen: false,
+         toDashboard: false
       }
 
       const data = localStorage.getItem('loggedIn');
       if (data !== undefined && data !== null) {
          console.log('local:', data);
+      }
+   }
+
+   componentDidMount() {
+      const loggedIn = localStorage.getItem('loggedIn') || false;
+      if (loggedIn) {
+         this.setState({
+            toDashboard: true,
+         })
       }
    }
 
@@ -43,8 +54,16 @@ class Home extends React.Component {
    }
 
    onSubmitClick = () => {
-      console.log('Form submitted, Data: ', this.state);
+      console.log('Form submitted, Data: ');
       localStorage.setItem('loggedIn', true);
+      localStorage.setItem('fname', this.state.fname);
+      localStorage.setItem('lname', this.state.lname);
+      localStorage.setItem('birthdayDate', this.state.birthdayDate);
+      localStorage.setItem('gender', this.state.gender);
+      localStorage.setItem('img', this.state.img);
+      this.setState({
+         toDashboard: true
+      })
    }
 
    onProfileImageChange = (event) => {
@@ -68,6 +87,9 @@ class Home extends React.Component {
    }
 
    render() {
+      if (this.state.toDashboard === true) {
+         return <Redirect to='/Post' />
+      }
       return (
          <div className="main" style={styles.containerStyle}>
             {/* <AppBar
