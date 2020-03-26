@@ -28,7 +28,7 @@ export const postToServer = (object) => {
                     // callback(data.message, null);
                     dispatch({
                         type: POST_DATA,
-                        success: false,
+                        success: true,
                         data
                     });
                 }
@@ -64,7 +64,7 @@ export const getFromServer = () => {
                     // callback(data.message, null);
                     dispatch({
                         type: GET_DATA,
-                        success: false,
+                        success: true,
                         data
                     });
                 }
