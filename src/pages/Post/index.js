@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-dom';
+import { Redirect } from "react-router-dom";
 import { Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile, GridListTileBar, ListSubheader } from '@material-ui/core';
 
 import { postToServer, getFromServer } from '../../actions/actionCreators';
@@ -38,6 +38,13 @@ class Post extends React.Component {
         this.setState({
             list
         });
+
+        this.refs.iScroll.addEventListener("scroll", () => {
+            if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >= this.refs.iScroll.scrollHeight) {
+                //   this.loadMoreItems();
+                console.log('scroll end');
+            }
+        });
     }
 
     onProfileImageChange = (event) => {
@@ -74,10 +81,10 @@ class Post extends React.Component {
     render() {
         console.log('state in render', this.state.allData);
         if (this.state.toHome === true) {
-            return <Redirect to='/Home' />
-         }
+            return <Redirect to='/' />
+        }
         return (
-            <div className='main'>
+            <div className='main' ref="iScroll">
                 {/* <Button variant="contained">Post</Button>
             <Button variant="contained" color="primary">Post</Button> */}
                 <Button
@@ -92,17 +99,23 @@ class Post extends React.Component {
                     Post
                 </Button>
                 <Button
-                            variant="contained"
-                            color="primary"
-                            style={{ marginLeft: 10 }}
-                            onClick={() => {
-                                localStorage.setItem('loggedIn', false);
-                                this.setState({
-                                    toHome: true
-                                 })
-                            }}
-                        >
-                            Log Out
+                    variant="contained"
+                    color="primary"
+                    style={{ marginLeft: 10 }}
+                    onClick={() => {
+                        localStorage.setItem('loggedIn', false);
+                        localStorage.removeItem('fname');
+                        localStorage.removeItem('lname');
+                        localStorage.removeItem('birthdayDate');
+                        localStorage.removeItem('gender');
+                        localStorage.removeItem('img');
+
+                        this.setState({
+                            toHome: true
+                        })
+                    }}
+                >
+                    Log Out
                 </Button>
                 <br />
                 <br />
@@ -125,7 +138,7 @@ class Post extends React.Component {
                     }}>
                     Change display type
                 </Button>
-
+                {/* <CircularProgress color="secondary" /> */}
                 {
                     this.state.switchList ?
                         <List>

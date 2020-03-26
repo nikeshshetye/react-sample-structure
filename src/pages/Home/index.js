@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Redirect } from 'react-dom';
+
+import { Redirect } from "react-router-dom";
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
 // import { makeStyles, useTheme } from '@material-ui/core/styles';
 // import { InboxIcon, ChevronLeftIcon, ChevronRightIcon, MenuIcon } from '@material-ui/icons';
@@ -8,6 +9,8 @@ import Post from '../Post';
 
 const navDrawerList = [{ id: 1, name: 'Home', link: '/' }, { id: 2, name: 'About', link: '/about' },
 { id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/post' }];
+
+const currentRedirect = '/';
 
 class Home extends React.Component {
    constructor() {
@@ -19,7 +22,8 @@ class Home extends React.Component {
          gender: '',
          img: '',
          isDrawerOpen: false,
-         toDashboard: false
+         toDashboard: false,
+         redirectTo: currentRedirect,
       }
 
       const data = localStorage.getItem('loggedIn');
@@ -29,8 +33,10 @@ class Home extends React.Component {
    }
 
    componentDidMount() {
+      console.log('m here in home', localStorage.getItem('loggedIn'), this.state.toDashboard);
       const loggedIn = localStorage.getItem('loggedIn') || false;
-      if (loggedIn) {
+      if (localStorage.getItem('loggedIn') === true) {
+         console.log('i entered home');
          this.setState({
             toDashboard: true,
          })
@@ -89,10 +95,12 @@ class Home extends React.Component {
    render() {
       if (this.state.toDashboard === true) {
          return <Redirect to='/Post' />
+      // if (this.state.redirectTo !== currentRedirect) {
+      //    return <Redirect to={this.state.redirectTo} />
       }
       return (
          <div className="main" style={styles.containerStyle}>
-            {/* <AppBar
+            <AppBar
                position="fixed"
             >
                <Toolbar>
@@ -108,7 +116,7 @@ class Home extends React.Component {
                      Register
                   </Typography>
                </Toolbar>
-            </AppBar> */}
+            </AppBar>
 
             <Drawer
                variant="persistent"
@@ -125,7 +133,13 @@ class Home extends React.Component {
                   {
                      navDrawerList.map((item, index) => {
                         return (
-                           <ListItem button key={item.id}>
+                           <ListItem button key={item.id} onClick={() => {
+                              console.log('history', item.link, this.props.history);
+                              // this.props.history.push(item.link);
+                              this.setState({
+                                 redirectTo: item.link,
+                              });
+                           }}>
                               {/* <ListItemIcon><InboxIcon /></ListItemIcon> */}
                               <ListItemText primary={item.name} />
                            </ListItem>

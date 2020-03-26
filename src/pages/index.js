@@ -20,13 +20,13 @@ class App extends Component {
     render() {
         return (
             <Fragment>
-                <div>
+                {/* <div>
                   <div><Link to="/">Home</Link></div>
                   <div><Link to="/Post">Post</Link></div>
-               </div>
+               </div> */}
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/Post" component={Post} />
+                    <Route path="/Post" component={Post} />
                     <Route path="/about" component={About} />
                 </Switch>
                 {/* 
