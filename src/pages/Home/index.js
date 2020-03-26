@@ -8,7 +8,7 @@ import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, Ic
 import Post from '../Post';
 
 const navDrawerList = [{ id: 1, name: 'Home', link: '/' }, { id: 2, name: 'About', link: '/about' },
-{ id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/post' }];
+{ id: 3, name: 'Shopping', link: '/shopping' }, { id: 4, name: 'Posts', link: '/Post' }];
 
 const currentRedirect = '/';
 
@@ -22,7 +22,6 @@ class Home extends React.Component {
          gender: '',
          img: '',
          isDrawerOpen: false,
-         toDashboard: false,
          redirectTo: currentRedirect,
       }
 
@@ -33,12 +32,12 @@ class Home extends React.Component {
    }
 
    componentDidMount() {
-      console.log('m here in home', localStorage.getItem('loggedIn'), this.state.toDashboard);
+      console.log('m here in home', localStorage.getItem('loggedIn'));
       const loggedIn = localStorage.getItem('loggedIn') || false;
       if (localStorage.getItem('loggedIn') === true) {
          console.log('i entered home');
          this.setState({
-            toDashboard: true,
+            redirectTo: '/Post',
          })
       }
    }
@@ -68,7 +67,7 @@ class Home extends React.Component {
       localStorage.setItem('gender', this.state.gender);
       localStorage.setItem('img', this.state.img);
       this.setState({
-         toDashboard: true
+         redirectTo: '/Post'
       })
    }
 
@@ -93,10 +92,8 @@ class Home extends React.Component {
    }
 
    render() {
-      if (this.state.toDashboard === true) {
-         return <Redirect to='/Post' />
-      // if (this.state.redirectTo !== currentRedirect) {
-      //    return <Redirect to={this.state.redirectTo} />
+      if (this.state.redirectTo !== currentRedirect) {
+         return <Redirect to={this.state.redirectTo} />
       }
       return (
          <div className="main" style={styles.containerStyle}>

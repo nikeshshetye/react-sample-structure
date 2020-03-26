@@ -1,4 +1,4 @@
-import { POST_DATA, GET_DATA }  from '../actions/actionsTypes';
+import { POST_DATA, GET_DATA, RESET }  from '../actions/actionsTypes';
 
 const initState = {
     data: [],
@@ -8,6 +8,12 @@ const initState = {
 
 export default (state = initState, action) => {
     switch(action.type) {
+      case RESET:
+        return {
+          ...state,
+          success: false,
+          type: RESET,
+        }
       case POST_DATA:
         return {
             ...state,

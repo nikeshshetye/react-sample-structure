@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APP_DATA, POST_DATA, GET_DATA } from './actionsTypes';
+import { APP_DATA, POST_DATA, GET_DATA, RESET } from './actionsTypes';
 import { POST_DATA_URL, GET_DATA_URL } from '../helpers/urlConst';
 
 export const requestAppData = appData => ({ type: APP_DATA, data: appData });
@@ -41,6 +41,11 @@ export const postToServer = (object) => {
                     success: false,
                     data: { error }
                 });
+            });
+            
+            dispatch({
+                type: RESET,
+                data: null
             });
     };
 }

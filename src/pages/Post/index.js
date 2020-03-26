@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
-import { Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile, GridListTileBar, ListSubheader } from '@material-ui/core';
+import {
+    Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile,
+    GridListTileBar, ListSubheader, Menu, MenuItem
+} from '@material-ui/core';
 
 import { postToServer, getFromServer } from '../../actions/actionCreators';
 import { POST_DATA, GET_DATA } from '../../actions/actionsTypes';
-import Home from '../Home';
 
 class Post extends React.Component {
 
@@ -20,6 +22,8 @@ class Post extends React.Component {
             postDesc: '',
             addedList: [],
             toHome: false,
+            showOptions: false,
+            anchorEl: null
         }
     }
 
@@ -63,13 +67,10 @@ class Post extends React.Component {
 
     static getDerivedStateFromProps(props, prevState) {
         console.log('getDerivedStateFromProps', props, prevState);
-        console.log('getDerivedStateFromProps alldata', props.post);
         if (props.post.success) {
-            console.log('success alldata', props.post);
             if (props.post.type === POST_DATA) {
 
             } else if (props.post.type === GET_DATA) {
-                console.log('GET_DATA alldata', props.post);
                 return {
                     allData: props.post.data,
                 }
@@ -79,7 +80,6 @@ class Post extends React.Component {
     }
 
     render() {
-        console.log('state in render', this.state.allData);
         if (this.state.toHome === true) {
             return <Redirect to='/' />
         }
@@ -144,20 +144,44 @@ class Post extends React.Component {
                         <List>
                             {
                                 this.state.allData.map((item, index) => {
+                                    // console.log('pedru', item);
                                     return (
                                         <ListItem
                                             button
+                                            onClick={() => { }}
                                             key={item.id}
-                                            onPress={() => { console.log('list item click') }}
                                             style={{
                                                 flexDirection: 'column',
                                                 boxShadow: '1px 0.5px 1px 1px #9E9E9E',
                                                 width: '20%',
                                                 margin: 15
                                             }}>
-                                            <ListItemAvatar>
-                                                <Avatar alt="Avatar" src={item.avatar} />
-                                            </ListItemAvatar>
+                                            <div style={{ flexDirection: 'row' }}>
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Avatar" src={item.avatar} />
+                                                </ListItemAvatar>
+                                                <Button
+                                                    aria-controls="simple-menu"
+                                                    aria-haspopup="true"
+                                                    onClick={(event) => {
+                                                        this.setState({
+                                                            anchorEl: event.currentTarget,
+                                                        });
+                                                    }}>
+                                                    Options
+                                                </Button>
+                                                <Menu
+                                                    anchorEl={this.state.anchorEl}
+                                                    open={Boolean(this.state.anchorEl)}
+                                                    onClose={() => {
+                                                        this.setState({ anchorEl: null });
+                                                    }}
+                                                    keepMounted
+                                                >
+                                                    <MenuItem onClick={() => this.setState({ anchorEl: null })}>Edit</MenuItem>
+                                                    <MenuItem onClick={() => this.setState({ anchorEl: null })}>Delete</MenuItem>
+                                                </Menu>
+                                            </div>
                                             <ListItemText primary={item.name} />
                                             <ListItemText primary={item.desc} />
                                         </ListItem>
@@ -281,9 +305,8 @@ class Post extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    console.log('state in mapsstate to props', state);
-    const { postReducer } = state;
+const mapStateToProps = ({ postReducer }) => {
+    console.log('mapStateToProps postReducer', postReducer);
     // return{
     //     cartItems,
     // }
