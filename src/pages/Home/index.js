@@ -69,7 +69,7 @@ class Home extends React.Component {
       // const [open, setOpen] = React.useState(false);
       return (
          <div className="main" style={styles.containerStyle}>
-            <AppBar
+            {/* <AppBar
                position="fixed"
             >
                <Toolbar>
@@ -79,14 +79,13 @@ class Home extends React.Component {
                      onClick={this.handleDrawerOpen}
                      edge="start"
                   >
-                     {/* <MenuIcon /> */}
                      <view style={{ width: 50, height: 50, backgroundColor: 'red' }} />
                   </IconButton>
                   <Typography variant="h6" noWrap>
                      Register
                   </Typography>
                </Toolbar>
-            </AppBar>
+            </AppBar> */}
 
             <Drawer
                variant="persistent"

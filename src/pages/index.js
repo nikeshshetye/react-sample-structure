@@ -1,10 +1,11 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 // import FullscreenLoader from 'fullscreenLoader';
 import Home from './Home';
+import Post from './Post';
 import { requestAppData } from '../actions/actionCreators';
 
 class App extends Component {
@@ -18,8 +19,13 @@ class App extends Component {
     render() {
         return (
             <Fragment>
+                <div>
+                  <div><Link to="/">Home</Link></div>
+                  <div><Link to="/Post">Post</Link></div>
+               </div>
                 <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/Post" component={Post} />
                 </Switch>
                 {/* 
                     // Toast Documentation
