@@ -20,10 +20,6 @@ class App extends Component {
     render() {
         return (
             <Fragment>
-                {/* <div>
-                  <div><Link to="/">Home</Link></div>
-                  <div><Link to="/Post">Post</Link></div>
-               </div> */}
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route path="/Post" component={Post} />
