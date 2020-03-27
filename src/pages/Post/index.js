@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import {
     Button, Modal, TextField, Avatar, List, ListItem, ListItemText, ListItemAvatar, GridList, GridListTile,
-    GridListTileBar, ListSubheader, Menu, MenuItem
+    GridListTileBar, ListSubheader, Menu, MenuItem, Backdrop
 } from '@material-ui/core';
 
 import { postToServer, getFromServer } from '../../actions/actionCreators';
@@ -171,17 +171,21 @@ class Post extends React.Component {
                                                     }}>
                                                     Options
                                                 </Button>
-                                                <Menu
-                                                    anchorEl={this.state.anchorEl}
-                                                    open={Boolean(this.state.anchorEl)}
-                                                    onClose={() => {
-                                                        this.setState({ anchorEl: null });
-                                                    }}
-                                                    keepMounted
-                                                >
-                                                    <MenuItem onClick={() => this.setState({ anchorEl: null })}>Edit</MenuItem>
-                                                    <MenuItem onClick={() => this.setState({ anchorEl: null })}>Delete</MenuItem>
-                                                </Menu>
+                                                <Backdrop open={Boolean(this.state.anchorEl)} onClick={() => {
+                                                    this.setState({ anchorEl: null });
+                                                }}>
+                                                    <Menu
+                                                        anchorEl={this.state.anchorEl}
+                                                        open={Boolean(this.state.anchorEl)}
+                                                        onClose={() => {
+                                                            this.setState({ anchorEl: null });
+                                                        }}
+                                                        keepMounted
+                                                    >
+                                                        <MenuItem onClick={() => this.setState({ anchorEl: null })}>Edit</MenuItem>
+                                                        <MenuItem onClick={() => this.setState({ anchorEl: null })}>Delete</MenuItem>
+                                                    </Menu>
+                                                </Backdrop>
                                             </div>
                                             <ListItemText primary={item.name} />
                                             <ListItemText primary={item.desc} />

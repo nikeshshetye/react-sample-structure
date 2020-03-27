@@ -1,7 +1,10 @@
 import React from 'react';
 
 import { Redirect } from "react-router-dom";
-import { AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
+import {
+   AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton,
+   Typography, TextField
+} from '@material-ui/core';
 // import { makeStyles, useTheme } from '@material-ui/core/styles';
 // import { InboxIcon, ChevronLeftIcon, ChevronRightIcon, MenuIcon } from '@material-ui/icons';
 // import clsx from 'clsx';
@@ -23,6 +26,11 @@ class Home extends React.Component {
          img: '',
          isDrawerOpen: false,
          redirectTo: currentRedirect,
+         errors: {
+            fname: '',
+            email: '',
+            lname: '',
+         }
       }
 
       const data = localStorage.getItem('loggedIn');
@@ -42,12 +50,37 @@ class Home extends React.Component {
       }
    }
 
-   onFirstNameChange = (event) => {
-      this.setState({ fname: event.target.value });
-   }
+   onTextChange = (event) => {
+      event.preventDefault();
+      const { name, value } = event.target;
+      let errors = this.state.errors;
 
-   onLastNameChange = (event) => {
-      this.setState({ lname: event.target.value });
+      switch (name) {
+         case 'fname':
+            errors.fname =
+               value.length < 3
+                  ? 'First Name must be 3 characters long!'
+                  : '';
+            break;
+         /* case 'email':
+            errors.email =
+               validEmailRegex.test(value)
+                  ? ''
+                  : 'Email is not valid!';
+            break; */
+         case 'lname':
+            errors.lname =
+               value.length < 3
+                  ? 'Last Name must be 3 characters long!'
+                  : '';
+            break;
+         default:
+            break;
+      }
+
+      this.setState({ errors, [name]: value }, () => {
+         console.log(errors)
+      })
    }
 
    onBirthDateChange = (event) => {
@@ -58,7 +91,24 @@ class Home extends React.Component {
       this.setState({ gender: event.target.value });
    }
 
-   onSubmitClick = () => {
+   validateForm(errors) {
+      let valid = true;
+      Object.values(errors).forEach(
+         // if we have an error string set valid to false
+         (val) => val.length > 0 && (valid = false)
+      );
+      return valid;
+   }
+
+   onSubmitClick = (event) => {
+      event.preventDefault();
+      if (this.validateForm(this.state.errors)) {
+         console.info('Valid Form')
+      } else {
+         console.error('Invalid Form')
+         return;
+      }
+
       console.log('Form submitted, Data: ');
       localStorage.setItem('loggedIn', true);
       localStorage.setItem('fname', this.state.fname);
@@ -158,14 +208,15 @@ class Home extends React.Component {
                   <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
                      <div style={styles.inputDivStyle}>
                         <label >First name:
-                       <input
+                           <TextField id="outlined-basic" label="First name" variant="outlined"
                               style={styles.inputStyle}
                               type="text"
                               id="fname"
                               name="fname"
-                              placeholder={'First name'}
                               value={this.state.fname}
-                              onChange={this.onFirstNameChange}
+                              onChange={this.onTextChange}
+                              error={this.state.errors.fname.length > 0}
+                              helperText={this.state.errors.fname}
                            />
                         </label>
                      </div>
@@ -173,14 +224,15 @@ class Home extends React.Component {
                      <br />
                      <div style={styles.inputDivStyle}>
                         <label >Last name:</label>
-                        <input
+                        <TextField id="outlined-basic" label="Last name" variant="outlined"
                            style={styles.inputStyle}
                            type="text"
                            id="lname"
                            name="lname"
-                           placeholder={'Last name'}
                            value={this.state.lname}
-                           onChange={this.onLastNameChange}
+                           onChange={this.onTextChange}
+                           error={this.state.errors.lname.length > 0}
+                           helperText={this.state.errors.lname}
                         />
                      </div>
                      <br />
