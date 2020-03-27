@@ -66,11 +66,12 @@ class Post extends React.Component {
     }
 
     static getDerivedStateFromProps(props, prevState) {
-        console.log('getDerivedStateFromProps', props, prevState);
+        console.log('getDerivedStateFromProps', props);
         if (props.post.success) {
             if (props.post.type === POST_DATA) {
 
             } else if (props.post.type === GET_DATA) {
+                console.log('getDerivedStateFromProps data', props.post.data);
                 return {
                     allData: props.post.data,
                 }

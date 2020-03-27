@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APP_DATA, POST_DATA, GET_DATA, RESET } from './actionsTypes';
+import { APP_DATA, POST_DATA, GET_DATA, RESET, GET_DATA_FAIL, POST_DATA_FAIL } from './actionsTypes';
 import { POST_DATA_URL, GET_DATA_URL } from '../helpers/urlConst';
 
 export const requestAppData = appData => ({ type: APP_DATA, data: appData });
@@ -27,11 +27,15 @@ export const postToServer = (object) => {
                 } else {
                     // callback(data.message, null);
                     dispatch({
-                        type: POST_DATA,
+                        type: POST_DATA_FAIL,
                         success: true,
                         data
                     });
                 }
+                dispatch({
+                    type: RESET,
+                    data: null
+                });
             })
             .catch(error => {
                 console.log('createNewProject Fetch Error', error);
@@ -41,11 +45,10 @@ export const postToServer = (object) => {
                     success: false,
                     data: { error }
                 });
-            });
-            
-            dispatch({
-                type: RESET,
-                data: null
+                dispatch({
+                    type: RESET,
+                    data: null
+                });
             });
     };
 }
@@ -58,7 +61,7 @@ export const getFromServer = () => {
         })
             .then(({ data }) => {
                 console.log('Category Fetch Response', data);
-                if (data.success) {
+                if (data) {
                     // callback(null, data.data);
                     dispatch({
                         type: GET_DATA,
@@ -68,19 +71,26 @@ export const getFromServer = () => {
                 } else {
                     // callback(data.message, null);
                     dispatch({
-                        type: GET_DATA,
-                        success: true,
-                        data
+                        type: GET_DATA_FAIL,
+                        success: false,
                     });
                 }
+                dispatch({
+                    type: RESET,
+                    data: null
+                });
             })
             .catch(error => {
                 console.log('Category Fetch Error', error);
                 // handleApiError(error, callback);
                 dispatch({
-                    type: POST_DATA,
+                    type: GET_DATA_FAIL,
                     success: false,
                     data: { error }
+                });
+                dispatch({
+                    type: RESET,
+                    data: null
                 });
             });
     };

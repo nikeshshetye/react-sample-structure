@@ -107,7 +107,7 @@ class Home extends React.Component {
                      onClick={this.handleDrawerOpen}
                      edge="start"
                   >
-                     <view style={{ width: 50, height: 50, backgroundColor: 'red' }} />
+                     <div style={{ width: 50, height: 50, backgroundColor: 'red' }} />
                   </IconButton>
                   <Typography variant="h6" noWrap>
                      Register
