@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 // import FullscreenLoader from 'fullscreenLoader';
 import Post from './Post';
@@ -9,13 +9,14 @@ import Home from './Home';
 import About from './About';
 import { requestAppData } from '../actions/actionCreators';
 
+// toast.configure();
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    componentDidMount() {}
+    componentDidMount() { }
 
     render() {
         return (
@@ -25,26 +26,22 @@ class App extends Component {
                     <Route path="/Post" component={Post} />
                     <Route path="/about" component={About} />
                 </Switch>
-                {/* 
-                    // Toast Documentation
-                    // https://github.com/fkhadra/react-toastify#toastcontainer
-                    // import { toast } from 'react-toastify';
-                    // toast.success('Wow so easy !');
-                    // toast.success("Hello", options) // add type: 'success' to options
-                    // toast.info("World", options) // add type: 'info' to options
-                    // toast.warn(<Img />, options) // add type: 'warning' to options
-                    // toast.error(<Img />, options) // add type: 'error' to options
-                    // toast.dismiss() // Remove all toasts ! 
-                */}
-                <ToastContainer
-                    hideProgressBar
-                    closeButton={true}
-                    newestOnTop
-                    autoClose={5000}
-                />
-                {/* {this.state.showLoader ? (
-                    <FullscreenLoader hasTransparentBg />
-                ) : null} */}
+                
+                <button type="button" onClick={() => {
+                    toast('Wow so easy !');
+                    toast.success('Wow so easy !');
+                    toast.success("Hello", {
+                        position: toast.POSITION.TOP_CENTER
+                    })
+                    toast.info("World", {
+                        position: toast.POSITION.BOTTOM_RIGHT,
+                        className: 'foo-bar'
+                    })
+                    toast.warn(<img />)
+                    toast.error(<img />)
+                    // toast.dismiss() // Remove all toasts 
+                }}>Toasts</button>
+                <ToastContainer /> {/* required */}
             </Fragment>
         );
     }
